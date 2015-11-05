@@ -12,10 +12,7 @@ import numpy
 import matplotlib.pyplot as plt
 import sys
 sys.path.append("../tools/")
-from feature_format import featureFormat, targetFeatureSplit
-
-
-
+from tools.feature_format import featureFormat, targetFeatureSplit
 
 def Draw(pred, features, poi, mark_poi=False, name="image.png", f1_name="feature 1", f2_name="feature 2"):
     """ some plotting code designed to help you visualize your clusters """
@@ -36,8 +33,6 @@ def Draw(pred, features, poi, mark_poi=False, name="image.png", f1_name="feature
     plt.savefig(name)
     plt.show()
 
-
-
 ### load in the dict of dicts containing all the data on each person in the dataset
 data_dict = pickle.load( open("../final_project/final_project_dataset.pkl", "r") )
 ### there's an outlier--remove it! 
@@ -48,24 +43,39 @@ data_dict.pop("TOTAL", 0)
 ### can be any key in the person-level dictionary (salary, director_fees, etc.) 
 feature_1 = "salary"
 feature_2 = "exercised_stock_options"
+feature_3 = "total_payments"
 poi  = "poi"
-features_list = [poi, feature_1, feature_2]
+features_list = [poi, feature_1, feature_2, feature_3]
 data = featureFormat(data_dict, features_list )
 poi, finance_features = targetFeatureSplit( data )
 
+from numpy import ndarray
+
+
+options=[]
+salary=[]
+for k,v in data_dict.iteritems():
+    if v['exercised_stock_options'] != 'NaN':
+        options.append(v['exercised_stock_options'])
+    if v['salary'] != 'NaN':
+        salary.append(v['salary'])
+
+print 'maximum options: {} minimum options: {}'.format(max(options), min(options))
+print 'maximum salary: {} minimum salary: {}'.format(max(salary), min(salary))
 
 ### in the "clustering with 3 features" part of the mini-project,
 ### you'll want to change this line to 
 ### for f1, f2, _ in finance_features:
 ### (as it's currently written, the line below assumes 2 features)
-for f1, f2 in finance_features:
-    plt.scatter( f1, f2 )
-plt.show()
+# for f1, f2 in finance_features:
+#     plt.scatter( f1, f2 )
+# plt.show()
 
 ### cluster here; create predictions of the cluster labels
 ### for the data and store them to a list called pred
-
-
+from sklearn.cluster import KMeans
+kmeans = KMeans(init='k-means++', n_clusters=2, n_init=10)
+pred = kmeans.fit_predict(finance_features)
 
 
 ### rename the "name" parameter when you change the number of features
