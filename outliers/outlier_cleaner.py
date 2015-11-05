@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import math
 
 def outlierCleaner(predictions, ages, net_worths):
     """
@@ -14,7 +15,16 @@ def outlierCleaner(predictions, ages, net_worths):
     cleaned_data = []
 
     ### your code goes here
+    for age, net, prediction in zip(ages, net_worths, predictions):
+        error = math.fabs(prediction - net)
+        data = (age, net, error)
+        cleaned_data.append(data)
 
-    
+    cleaned_data = sorted(cleaned_data, key=lambda cleaned: cleaned[2])
+
+    cleaned_data = cleaned_data[:int(len(cleaned_data)*0.9)]
+    # cleaned_data = cleaned_data[10:]
+    print 'cleaned data lenght is: {}'.format(len(cleaned_data))
+
     return cleaned_data
 
