@@ -6,7 +6,7 @@ import re
 import sys
 
 sys.path.append( "../tools/" )
-from parse_out_email_text import parseOutText
+from tools.parse_out_email_text import parseOutText
 
 """
     Starter code to process the emails from Sara and Chris to extract
@@ -36,6 +36,7 @@ word_data = []
 ### can iterate your modifications quicker
 temp_counter = 0
 
+# find workarea/ud120-projects/enron_mail_20150507/maildir/ -name "*\." -exec rename \. .txt {} \;
 
 for name, from_person in [("sara", from_sara), ("chris", from_chris)]:
     for path in from_person:
@@ -43,20 +44,21 @@ for name, from_person in [("sara", from_sara), ("chris", from_chris)]:
         ### once everything is working, remove this line to run over full dataset
         temp_counter += 1
         if temp_counter < 200:
-            path = os.path.join('..', path[:-1])
+            path = os.path.join('C:/Users/pchernov/workarea/ud120-projects/enron_mail_20150507/', path.strip() + 'txt')
             print path
             email = open(path, "r")
 
-            ### use parseOutText to extract the text from the opened email
 
+            ### use parseOutText to extract the text from the opened email
+            text = parseOutText(email)
             ### use str.replace() to remove any instances of the words
             ### ["sara", "shackleton", "chris", "germani"]
-
+            for word in ["sara", "shackleton", "chris", "germani"]:
+                text = text.replace(word, '')
             ### append the text to word_data
-
+            word_data.append(text)
             ### append a 0 to from_data if email is from Sara, and 1 if email is from Chris
-
-
+            from_data.append([0 if name == 'sara' else 1][0])
             email.close()
 
 print "emails processed"
