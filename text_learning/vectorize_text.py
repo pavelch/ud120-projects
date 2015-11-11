@@ -4,9 +4,12 @@ import os
 import pickle
 import re
 import sys
+import nltk
 
 sys.path.append( "../tools/" )
 from tools.parse_out_email_text import parseOutText
+from sklearn.feature_extraction.text import TfidfVectorizer
+from nltk.corpus import stopwords
 
 """
     Starter code to process the emails from Sara and Chris to extract
@@ -42,10 +45,9 @@ for name, from_person in [("sara", from_sara), ("chris", from_chris)]:
     for path in from_person:
         ### only look at first 200 emails when developing
         ### once everything is working, remove this line to run over full dataset
-        temp_counter += 1
-        if temp_counter < 200:
-            path = os.path.join('C:/Users/pchernov/workarea/ud120-projects/enron_mail_20150507/', path.strip() + 'txt')
-            print path
+        # temp_counter += 1
+        if temp_counter < 160:
+            path = os.path.join('C:/Users/pchernov/workarea/db/enron_mail_20150507/', path.strip() + 'txt')
             email = open(path, "r")
 
 
@@ -62,16 +64,21 @@ for name, from_person in [("sara", from_sara), ("chris", from_chris)]:
             email.close()
 
 print "emails processed"
+print word_data[152]
 from_sara.close()
 from_chris.close()
 
 pickle.dump( word_data, open("your_word_data.pkl", "w") )
 pickle.dump( from_data, open("your_email_authors.pkl", "w") )
 
-
-
-
-
 ### in Part 4, do TfIdf vectorization here
+
+# nltk.download('stopwords')
+# sw = stopwords.words('english')
+
+result = TfidfVectorizer(stop_words='english')
+result.fit(word_data)
+theword = [w for w, n in result.vocabulary_.iteritems() if n == 34597]
+print 'number of words: {}, the word: {}'.format(len(result.get_feature_names()), theword)
 
 
