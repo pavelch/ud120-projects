@@ -2,6 +2,9 @@
 
 import pickle
 import numpy
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
+from numpy import ndarray
 numpy.random.seed(42)
 
 
@@ -32,12 +35,32 @@ features_test  = vectorizer.transform(features_test).toarray()
 ### a classic way to overfit is to use a small number
 ### of data points and a large number of features;
 ### train on only 150 events to put ourselves in this regime
-features_train = features_train[:150].toarray()
+features_train = features_train[:150]
 labels_train   = labels_train[:150]
 
-
-
 ### your code goes here
+regression = DecisionTreeClassifier()
+regression.fit(features_train, labels_train)
+pred = regression.predict(features_test)
+accuracy = accuracy_score(labels_test, pred)
+print 'accuracy is: {}'.format(accuracy)
+
+importances = regression.feature_importances_
+
+vals = []
+i = 0
+for val in numpy.nditer(importances):
+    if val > 0.2:
+        vals.append([i,val])
+    i += 1
+print vals
+
+words = vectorizer.get_feature_names()
+for item in iter(vals):
+    print words[item[0]]
+
+
+
 
 
 

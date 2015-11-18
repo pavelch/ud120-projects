@@ -55,7 +55,7 @@ for name, from_person in [("sara", from_sara), ("chris", from_chris)]:
             text = parseOutText(email)
             ### use str.replace() to remove any instances of the words
             ### ["sara", "shackleton", "chris", "germani"]
-            for word in ["sara", "shackleton", "chris", "germani"]:
+            for word in ["sara", "shackleton", "chris", "germani", "sshacklensf", "cgermannsf"]:
                 text = text.replace(word, '')
             ### append the text to word_data
             word_data.append(text)
@@ -80,5 +80,6 @@ result = TfidfVectorizer(stop_words='english')
 result.fit(word_data)
 theword = [w for w, n in result.vocabulary_.iteritems() if n == 34597]
 print 'number of words: {}, the word: {}'.format(len(result.get_feature_names()), theword)
+
 
 
