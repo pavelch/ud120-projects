@@ -6,7 +6,7 @@ import re
 import sys
 import nltk
 
-sys.path.append( "../tools/" )
+sys.path.append("../tools/")
 from tools.parse_out_email_text import parseOutText
 from sklearn.feature_extraction.text import TfidfVectorizer
 from nltk.corpus import stopwords
@@ -25,8 +25,7 @@ from nltk.corpus import stopwords
     The data is stored in lists and packed away in pickle files at the end.
 """
 
-
-from_sara  = open("from_sara.txt", "r")
+from_sara = open("from_sara.txt", "r")
 from_chris = open("from_chris.txt", "r")
 
 from_data = []
@@ -50,7 +49,6 @@ for name, from_person in [("sara", from_sara), ("chris", from_chris)]:
             path = os.path.join('C:/Users/pchernov/workarea/db/enron_mail_20150507/', path.strip() + 'txt')
             email = open(path, "r")
 
-
             ### use parseOutText to extract the text from the opened email
             text = parseOutText(email)
             ### use str.replace() to remove any instances of the words
@@ -68,8 +66,8 @@ print word_data[152]
 from_sara.close()
 from_chris.close()
 
-pickle.dump( word_data, open("your_word_data.pkl", "w") )
-pickle.dump( from_data, open("your_email_authors.pkl", "w") )
+pickle.dump(word_data, open("your_word_data.pkl", "w"))
+pickle.dump(from_data, open("your_email_authors.pkl", "w"))
 
 ### in Part 4, do TfIdf vectorization here
 
@@ -80,6 +78,3 @@ result = TfidfVectorizer(stop_words='english')
 result.fit(word_data)
 theword = [w for w, n in result.vocabulary_.iteritems() if n == 34597]
 print 'number of words: {}, the word: {}'.format(len(result.get_feature_names()), theword)
-
-
-

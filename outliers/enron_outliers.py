@@ -31,7 +31,7 @@ for point in data:
     salary = point[0]
     bonus = point[1]
     if salary != max_salary:
-        matplotlib.pyplot.scatter( salary, bonus )
+        matplotlib.pyplot.scatter(salary, bonus)
 
 matplotlib.pyplot.xlabel("salary")
 matplotlib.pyplot.ylabel("bonus")
